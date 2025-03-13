@@ -9,6 +9,8 @@ import UIKit
 
 class HomeVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    // MARK: - PROPERTIES
+    
     private let homeLabel: UILabel = {
         let lab = UILabel()
         lab.text = "Home"
@@ -69,6 +71,8 @@ class HomeVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         return tableView
     }()
     
+    // MARK: - LIFE CIRCLE
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -76,6 +80,8 @@ class HomeVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         setupTableView()
         setupConstraints()
     }
+    
+    // MARK: - METHODS
     
     private func setupUI() {
         view.backgroundColor = UIColor(hex: "#FF9AB2")
@@ -130,6 +136,7 @@ class HomeVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     // MARK: - TableView data sorcce and delegate methods
+    
     private func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self

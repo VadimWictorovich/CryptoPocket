@@ -9,12 +9,16 @@ import UIKit
 
 final class CoinCell: UITableViewCell {
     
+    // MARK: - PROPERTIES
+    
     private let imageCoin = UIImageView()
     private let labelNameCoin = UILabel()
     private let labelShortNameCoin = UILabel()
     private let labelPriceCoin = UILabel()
     private let labelRate = UILabel()
     private let imageRate = UIImageView()
+
+    // MARK: - LIFE CIRCLE
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
