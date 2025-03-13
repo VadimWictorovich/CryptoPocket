@@ -7,17 +7,113 @@
 
 import UIKit
 
-class CoinCell: UITableViewCell {
+final class CoinCell: UITableViewCell {
+    
+    private let imageCoin = UIImageView()
+    private let labelNameCoin = UILabel()
+    private let labelShortNameCoin = UILabel()
+    private let labelPriceCoin = UILabel()
+    private let labelRate = UILabel()
+    private let imageRate = UIImageView()
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        addViews()
+        setupimageCoin()
+        setupLabelNameCoin()
+        setupLabelShortNameCoin()
+        setupLabelPriceCoin()
+        setupLabelRate()
+        setupImageRate()
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-
+    
+    private func addViews() {
+        contentView.addSubview(imageCoin)
+        contentView.addSubview(labelNameCoin)
+        contentView.addSubview(labelShortNameCoin)
+        contentView.addSubview(labelPriceCoin)
+        contentView.addSubview(labelRate)
+        contentView.addSubview(imageRate)
+    }
+    
+    private func setupimageCoin() {
+        imageCoin.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        imageCoin.contentMode = .scaleAspectFit
+        imageCoin.layer.cornerRadius = 25
+        imageCoin.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageCoin.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25),
+            imageCoin.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 0),
+            imageCoin.widthAnchor.constraint(equalToConstant: 50),
+            imageCoin.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+    
+    private func setupLabelNameCoin() {
+        labelNameCoin.font = .systemFont(ofSize: 18, weight: .medium)
+        labelNameCoin.textColor = .black
+        labelNameCoin.textAlignment = .left
+        labelNameCoin.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            labelNameCoin.leadingAnchor.constraint(equalTo: imageCoin.leadingAnchor, constant: 70),
+            labelNameCoin.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -11.5)
+        ])
+    }
+    
+    private func setupLabelShortNameCoin() {
+        labelShortNameCoin.font = .systemFont(ofSize: 14, weight: .medium)
+        labelShortNameCoin.textColor = .gray
+        labelShortNameCoin.textAlignment = .left
+        labelShortNameCoin.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            labelShortNameCoin.leadingAnchor.constraint(equalTo: imageCoin.leadingAnchor, constant: 70),
+            labelShortNameCoin.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 15.5)
+        ])
+    }
+    
+    private func setupLabelPriceCoin() {
+        labelPriceCoin.font = .systemFont(ofSize: 18, weight: .medium)
+        labelPriceCoin.textColor = .black
+        labelPriceCoin.textAlignment = .right
+        labelPriceCoin.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            labelPriceCoin.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
+            labelPriceCoin.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -11.5)
+        ])
+    }
+    
+    private func setupLabelRate() {
+        labelRate.font = .systemFont(ofSize: 14, weight: .medium)
+        labelRate.textColor = .gray
+        labelRate.textAlignment = .right
+        labelRate.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            labelRate.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
+            labelRate.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 15.5)
+        ])
+    }
+    
+    
+    private func setupImageRate() {
+        imageRate.image = UIImage(systemName: "chevron.up")
+        imageRate.frame = CGRect(origin: .zero, size: CGSize(width: 5, height: 5))
+        imageRate.tintColor = .green
+        imageRate.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageRate.trailingAnchor.constraint(equalTo: labelRate.trailingAnchor, constant: -40),
+            imageRate.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 15.5)
+        ])
+    }
+    
+    func configure(image: UIImage? = UIImage(systemName: "bitcoinsign.circle"), name: String?, shortName: String?, price: String?, rate: String?) {
+        imageCoin.image = image
+        labelNameCoin.text = name
+        labelShortNameCoin.text = shortName
+        labelPriceCoin.text = price
+        labelRate.text = rate
+    }
 }

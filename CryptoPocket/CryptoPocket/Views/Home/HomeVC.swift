@@ -19,9 +19,14 @@ class HomeVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         return lab
     }()
     
-    private let rightBarButton: UIBarButtonItem = {
-        let but = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: nil, action: nil)
+    private let rightBarButton: UIButton = {
+        let but = UIButton()
+        but.frame = CGRect(x: 0, y: 0, width: 48, height: 48)
+        but.layer.cornerRadius = 24
+        but.setImage(UIImage(systemName: "ellipsis"), for: .normal)
         but.tintColor = .black
+        but.layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.8).cgColor
+        but.showsMenuAsPrimaryAction = true
         return but
     }()
     
@@ -54,53 +59,49 @@ class HomeVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
-        /*
-         let image0 = UIImage(named: "Object 1.png")?.cgImage
-         let layer0 = CALayer()
-         layer0.contents = image0
-         layer0.bounds = view.bounds
-         layer0.position = view.center
-         view.layer.addSublayer(layer0)
-         
-         view.widthAnchor.constraint(equalToConstant: 242).isActive = true
-         view.heightAnchor.constraint(equalToConstant: 242).isActive = true
-         view.leadingAnchor.constraint(equalTo: parent.leadingAnchor, constant: 189).isActive = true
-         view.topAnchor.constraint(equalTo: parent.topAnchor, constant: 101).isActive = true
-         */
     }()
     
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.layer.backgroundColor = UIColor(red: 0.967, green: 0.97, blue: 0.979, alpha: 1).cgColor
+        tableView.backgroundColor = .white
         tableView.layer.cornerRadius = 40
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupNavigation()
         setupTableView()
         setupConstraints()
     }
     
-    
     private func setupUI() {
         view.backgroundColor = UIColor(hex: "#FF9AB2")
-//        navigationItem.title = "Home"
-//        navigationItem.largeTitleDisplayMode = .always
-//        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: homeLabel)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: nil, action: nil)
-
-        navigationController?.navigationBar.largeTitleTextAttributes = [ NSAttributedString.Key.foregroundColor: UIColor.white]
-        
-        
         view.addSubview(affiliateProgramLabel)
         view.addSubview(learnMoreButton)
         view.addSubview(imageFromBackground)
         view.addSubview(tableView)
+        rightBarButton.menu = showMenuView()
+        
+    }
+    
+    private func setupNavigation() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: homeLabel)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBarButton)
+        navigationController?.navigationBar.largeTitleTextAttributes = [ NSAttributedString.Key.foregroundColor: UIColor.white]
+    }
+    
+    private func showMenuView() -> UIMenu {
+        let action1 = UIAction(title: "Обновить", image: UIImage(named: "menu1")) { _ in
+            print ("Кнопка обновить")
+        }
+        let action2 = UIAction(title: "Выйти", image: UIImage(named: "menu2")) { [weak self] _ in
+            self?.navigationController?.popToRootViewController(animated: true)
+        }
+        let menu = UIMenu(title: "", children: [action1, action2])
+        return menu
     }
     
     private func setupConstraints() {
@@ -125,24 +126,67 @@ class HomeVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
-            ])
+        ])
     }
     
-    // TableView data sorcce and delegate methods
+    // MARK: - TableView data sorcce and delegate methods
     private func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(CoinCell.self, forCellReuseIdentifier: "CoinCell")
         tableView.separatorStyle = .none
         tableView.rowHeight = UITableView.automaticDimension
+        //tableView.estimatedSectionHeaderHeight = 30
+    }
+    // Sections
+    func numberOfSections(in tableView: UITableView) -> Int { 1 }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { 50 }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let sView = UIView()
+        let label = UILabel()
+        let filtButton = UIButton()
+        sView.addSubview(label)
+        sView.addSubview(filtButton)
+        settingsForSectionLabel(label: label, superView: sView)
+        settingsSortButton(button: filtButton, superView: sView)
+        return sView
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1
-    }
+    // Rows
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 1 }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        CoinCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CoinCell", for: indexPath) as? CoinCell else { return UITableViewCell() }
+        cell.configure(name: "Bitcoin", shortName: "BTC", price: "$ 43.000", rate: "24 %")
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = DetailVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    // Other methods
+    private func settingsSortButton(button: UIButton, superView: UIView) {
+        button.setImage(UIImage(named: "filt"), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            button.trailingAnchor.constraint(equalTo: superView.trailingAnchor, constant: -16),
+            button.centerYAnchor.constraint(equalTo: superView.centerYAnchor)
+            ])
+    }
+    
+    private func settingsForSectionLabel(label: UILabel, superView: UIView) {
+        label.text = "  Trending"
+        label.textColor = .black
+        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: superView.leadingAnchor, constant: 16),
+            label.centerYAnchor.constraint(equalTo: superView.centerYAnchor)
+            ])
     }
 }
 
