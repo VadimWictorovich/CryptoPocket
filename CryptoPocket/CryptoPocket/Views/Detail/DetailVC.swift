@@ -11,6 +11,7 @@ final class DetailVC: UIViewController {
     
     // MARK: - PROPERTIES
 
+    private let leftNavBarButton = UIButton()
     private let labelPrice = UILabel()
     private let labelRate = UILabel()
     private let imageRate = UIImageView()
@@ -29,7 +30,7 @@ final class DetailVC: UIViewController {
         super.viewDidLoad()
         setupUI()
         addViews()
-        settingsViews()
+        addSettingsViews()
     }
     
     // MARK: - METHODS
@@ -37,6 +38,7 @@ final class DetailVC: UIViewController {
     private func setupUI() {
         view.backgroundColor = UIColor(hex: "#F3F5F6")
         navigationItem.title = "Bitcoin (BTC)"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftNavBarButton)
     }
     
     private func addViews() {
@@ -47,15 +49,24 @@ final class DetailVC: UIViewController {
         view.addSubview(descriptionTableView)
     }
     
-    private func settingsViews() {
+    private func addSettingsViews() {
         settingsForLabelPrice()
         settingsForLabelRate()
         settingsForimageRate()
         settingsForCollectionTimelineView()
         settingsDescriptionTableView()
+        settingsLeftNavBarButton()
     }
     
     // MARK: Setting Views
+    private func settingsLeftNavBarButton() {
+        leftNavBarButton.frame = CGRect(x: 0, y: 0, width: 48, height: 48)
+        leftNavBarButton.layer.cornerRadius = 24
+        leftNavBarButton.setImage(UIImage(systemName: "arrow.left"), for: .normal)
+        leftNavBarButton.tintColor = .black
+        leftNavBarButton.backgroundColor = .white
+    }
+    
     private func settingsForLabelPrice() {
         // !!!!!
         labelPrice.text = "$32,128.80"
@@ -126,7 +137,4 @@ final class DetailVC: UIViewController {
             descriptionTableView.heightAnchor.constraint(equalToConstant: 242)
         ])
     }
-    
-        
-
 }
