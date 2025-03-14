@@ -36,11 +36,13 @@ struct CryptoData: Codable {
 struct MarketData: Codable {
     let priceUsd: Double
     let volumeLast24Hours: Double
+    let percentChangeUsdLast24Hours: Double
 
     // Маппинг JSON-ключей на свойства
     enum CodingKeys: String, CodingKey {
         case priceUsd = "price_usd"
         case volumeLast24Hours = "volume_last_24_hours"
+        case percentChangeUsdLast24Hours = "percent_change_usd_last_24_hours"
     }
 }
 

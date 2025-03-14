@@ -10,7 +10,6 @@ import UIKit
 final class UserAuthVC: UIViewController {
     
     // MARK: - PROPERTIES
-    var vm = HomeVM()
         
     private let logo: UIImageView = {
         let img = UIImageView(image: UIImage(named: "logo"))
@@ -65,7 +64,6 @@ final class UserAuthVC: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupConstrainsts()
-        vm.getRequestCoins()
     }
     
     // MARK: - METHODS
@@ -109,6 +107,7 @@ final class UserAuthVC: UIViewController {
     @objc private func loginTapped() {
         let vc = HomeVC()
         navigationController?.pushViewController(vc, animated: true)
+        vc.showActivityIndicator()
     }
 }
 

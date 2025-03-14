@@ -22,7 +22,6 @@ final class DetailVC: UIViewController {
         layout.itemSize = CGSize(width: 70, height: 48)
         return UICollectionView(frame: .zero, collectionViewLayout: layout)
     }()
-
     
     // MARK: - LIFE CIRCLE
     
@@ -65,6 +64,7 @@ final class DetailVC: UIViewController {
         leftNavBarButton.setImage(UIImage(systemName: "arrow.left"), for: .normal)
         leftNavBarButton.tintColor = .black
         leftNavBarButton.backgroundColor = .white
+        leftNavBarButton.addTarget(self, action: #selector(backAction), for: .touchUpInside)
     }
     
     private func settingsForLabelPrice() {
@@ -136,5 +136,9 @@ final class DetailVC: UIViewController {
             descriptionTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
             descriptionTableView.heightAnchor.constraint(equalToConstant: 242)
         ])
+    }
+    
+    @objc private func backAction() {
+        navigationController?.popViewController(animated: true)
     }
 }
