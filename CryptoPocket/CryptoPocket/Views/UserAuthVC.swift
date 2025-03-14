@@ -9,9 +9,9 @@ import UIKit
 
 final class UserAuthVC: UIViewController {
     
-    // MARK: - Properties
-    private var viewModel = UserAuthVM()
-    
+    // MARK: - PROPERTIES
+    var vm = HomeVM()
+        
     private let logo: UIImageView = {
         let img = UIImageView(image: UIImage(named: "logo"))
         img.contentMode = .scaleAspectFit
@@ -59,14 +59,17 @@ final class UserAuthVC: UIViewController {
     }()
     
     
-    // MARK: - Life circle VC
+    // MARK: - LIFE CIRCLE
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupConstrainsts()
+        vm.getRequestCoins()
     }
     
-    // MARK: - Methods
+    // MARK: - METHODS
+    
     private func setupUI() {
         view.backgroundColor = UIColor(hex: "#F3F5F6")
         view.addSubview(logo)
@@ -107,7 +110,6 @@ final class UserAuthVC: UIViewController {
         let vc = HomeVC()
         navigationController?.pushViewController(vc, animated: true)
     }
-
 }
 
 

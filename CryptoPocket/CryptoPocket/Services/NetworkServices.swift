@@ -21,32 +21,32 @@ enum CoinsAPI: String, CaseIterable {
     case ripple = "xrp"
 }
 
-struct CoinModel: Decodable {
-    
-}
-
 final class NetworkServices {
     
     static let shared = NetworkServices()
     private init() {}
     
-    func fetchCoin (coin: CoinsAPI, callback: @escaping (_ result: CoinModel?, _ error: Error?) -> ()) {
-        guard let url = URL(string: "https://data.messari.io/api/v1/assets/\(coin.rawValue)/metrics") else { print(" * \(#function) - невалидный URL"); return }
+    func fetchCoin (coin: CoinsAPI, callback: @escaping (_ result: CryptoResponse?, _ error: Error?) -> ()) {
+        guard let url = URL(string: "https://data.messari.io/api/v1/assets/\(coin.rawValue)/metrics") else {
+            print(" * \(#function) - невалидный URL")
+            return
+        }
         fetchData(from: url, completion: callback)
     }
     
-    private func fetchData (from url: URL, completion: @escaping (CoinModel?, Error?) -> ()) {
+    private func fetchData (from url: URL, completion: @escaping (CryptoResponse?, Error?) -> ()) {
         URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
             if let error { print(" * \(#function) - \(error)"); return  }
-            guard let data else { print(" * \(#function) - нет даты"); return }
-            let result = self?.parseJSON(data: data)
+            guard let self,
+                  let data,
+                  let result = self.parseJSON(data: data) else { print(" * \(#function) - нет даты"); return }
             completion(result, error)
         }.resume()
     }
     
-    private func parseJSON ( data: Data) -> CoinModel? {
+    private func parseJSON ( data: Data) -> CryptoResponse? {
         do {
-            return try JSONDecoder().decode(CoinModel.self, from: data)
+            return try JSONDecoder().decode(CryptoResponse.self, from: data)
         } catch {
             print(" * \(#function) - \(error)")
             return nil

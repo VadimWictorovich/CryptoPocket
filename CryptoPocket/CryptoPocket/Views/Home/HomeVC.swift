@@ -7,9 +7,11 @@
 
 import UIKit
 
-class HomeVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class HomeVC: UIViewController {
     
     // MARK: - PROPERTIES
+    
+    private let tableView = UITableView()
     
     private let homeLabel: UILabel = {
         let lab = UILabel()
@@ -63,34 +65,33 @@ class HomeVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         return imageView
     }()
     
-    private let tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.backgroundColor = .white
-        tableView.layer.cornerRadius = 40
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        return tableView
-    }()
-    
     // MARK: - LIFE CIRCLE
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupNavigation()
-        setupTableView()
-        setupConstraints()
+        addViews()
+        settingsViews()
     }
     
     // MARK: - METHODS
     
     private func setupUI() {
         view.backgroundColor = UIColor(hex: "#FF9AB2")
+        rightBarButton.menu = showMenuView()
+    }
+    
+    private func addViews() {
         view.addSubview(affiliateProgramLabel)
         view.addSubview(learnMoreButton)
         view.addSubview(imageFromBackground)
         view.addSubview(tableView)
-        rightBarButton.menu = showMenuView()
-        
+    }
+    
+    private func settingsViews() {
+        setupNavigation()
+        setupTableView()
+        setupConstraints()
     }
     
     private func setupNavigation() {
@@ -99,15 +100,15 @@ class HomeVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         navigationController?.navigationBar.largeTitleTextAttributes = [ NSAttributedString.Key.foregroundColor: UIColor.white]
     }
     
-    private func showMenuView() -> UIMenu {
-        let action1 = UIAction(title: "Обновить", image: UIImage(named: "menu1")) { _ in
-            print ("Кнопка обновить")
-        }
-        let action2 = UIAction(title: "Выйти", image: UIImage(named: "menu2")) { [weak self] _ in
-            self?.navigationController?.popToRootViewController(animated: true)
-        }
-        let menu = UIMenu(title: "", children: [action1, action2])
-        return menu
+    private func setupTableView() {
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(CoinCell.self, forCellReuseIdentifier: "CoinCell")
+        tableView.backgroundColor = .white
+        tableView.layer.cornerRadius = 40
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.separatorStyle = .none
+        tableView.rowHeight = UITableView.automaticDimension
     }
     
     private func setupConstraints() {
@@ -135,65 +136,15 @@ class HomeVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         ])
     }
     
-    // MARK: - TableView data sorcce and delegate methods
-    
-    private func setupTableView() {
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(CoinCell.self, forCellReuseIdentifier: "CoinCell")
-        tableView.separatorStyle = .none
-        tableView.rowHeight = UITableView.automaticDimension
-        //tableView.estimatedSectionHeaderHeight = 30
-    }
-    // Sections
-    func numberOfSections(in tableView: UITableView) -> Int { 1 }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { 50 }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let sView = UIView()
-        let label = UILabel()
-        let filtButton = UIButton()
-        sView.addSubview(label)
-        sView.addSubview(filtButton)
-        settingsForSectionLabel(label: label, superView: sView)
-        settingsSortButton(button: filtButton, superView: sView)
-        return sView
-    }
-    
-    // Rows
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 1 }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CoinCell", for: indexPath) as? CoinCell else { return UITableViewCell() }
-        cell.configure(name: "Bitcoin", shortName: "BTC", price: "$ 43.000", rate: "24 %")
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = DetailVC()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    // Other methods
-    private func settingsSortButton(button: UIButton, superView: UIView) {
-        button.setImage(UIImage(named: "filt"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            button.trailingAnchor.constraint(equalTo: superView.trailingAnchor, constant: -16),
-            button.centerYAnchor.constraint(equalTo: superView.centerYAnchor)
-            ])
-    }
-    
-    private func settingsForSectionLabel(label: UILabel, superView: UIView) {
-        label.text = "  Trending"
-        label.textColor = .black
-        label.font = .systemFont(ofSize: 20, weight: .medium)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: superView.leadingAnchor, constant: 16),
-            label.centerYAnchor.constraint(equalTo: superView.centerYAnchor)
-            ])
+    private func showMenuView() -> UIMenu {
+        let action1 = UIAction(title: "Обновить", image: UIImage(named: "menu1")) { _ in
+            print ("Кнопка обновить")
+        }
+        let action2 = UIAction(title: "Выйти", image: UIImage(named: "menu2")) { [weak self] _ in
+            self?.navigationController?.popToRootViewController(animated: true)
+        }
+        let menu = UIMenu(title: "", children: [action1, action2])
+        return menu
     }
 }
 
