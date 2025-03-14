@@ -11,9 +11,9 @@ final class HomeVC: UIViewController {
 
     // MARK: - PROPERTIES
     
-    private let viewModel = HomeVM()
     private let tableView = UITableView()
-    
+    let viewModel = HomeVM()
+
     private let homeLabel: UILabel = {
         let lab = UILabel()
         lab.text = "Home"
@@ -158,76 +158,9 @@ final class HomeVC: UIViewController {
         }
     }
     
-    @objc private func sortAction() {
+    @objc func sortAction() {
         viewModel.sortCoins(updateList: true)
         tableView.reloadData()
     }
 }
-
-// MARK: - TABLE VIEW DATA SEOURCE & DELEGATE
-
-extension HomeVC: UITableViewDataSource, UITableViewDelegate {
-    
-    func numberOfSections(in tableView: UITableView) -> Int { 1 }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { 60 }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let sView = UIView()
-        let label = UILabel()
-        let filtButton = UIButton()
-        sView.addSubview(label)
-        sView.addSubview(filtButton)
-        settingsForSectionLabel(label: label, superView: sView)
-        settingsSortButton(button: filtButton, superView: sView)
-        sView.backgroundColor = .white
-        return sView
-    }
-    
-    // MARK: ROWS
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { viewModel.coins.count }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CoinCell", for: indexPath) as? CoinCell else { return UITableViewCell() }
-        let coin = viewModel.coins[indexPath.row]
-        cell.selectionStyle = .none
-        cell.configure(name: coin.data.name,
-                       shortName: coin.data.symbol,
-                       price: "$\(String(format: "%.2f", coin.data.marketData.priceUsd))",
-                       rate: "\(String(format: "%.1f", coin.data.marketData.percentChangeUsdLast24Hours))%")
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = DetailVC()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    private func settingsSortButton(button: UIButton, superView: UIView) {
-        button.setImage(UIImage(named: "filt"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(sortAction), for: .touchUpInside)
-        NSLayoutConstraint.activate([
-            button.trailingAnchor.constraint(equalTo: superView.trailingAnchor, constant: -16),
-            button.centerYAnchor.constraint(equalTo: superView.centerYAnchor)
-            ])
-    }
-    
-    private func settingsForSectionLabel(label: UILabel, superView: UIView) {
-        label.text = "  Trending"
-        label.textColor = .black
-        label.font = .systemFont(ofSize: 20, weight: .medium)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: superView.leadingAnchor, constant: 16),
-            label.centerYAnchor.constraint(equalTo: superView.centerYAnchor)
-            ])
-    }
-}
-
 

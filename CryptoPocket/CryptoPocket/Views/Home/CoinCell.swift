@@ -104,12 +104,13 @@ final class CoinCell: UITableViewCell {
     
     private func setupImageRate() {
         imageRate.image = UIImage(systemName: "chevron.up")
-        imageRate.frame = CGRect(origin: .zero, size: CGSize(width: 5, height: 5))
         imageRate.tintColor = .green
         imageRate.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageRate.trailingAnchor.constraint(equalTo: labelRate.trailingAnchor, constant: -40),
-            imageRate.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 15.5)
+            imageRate.trailingAnchor.constraint(equalTo: labelRate.trailingAnchor, constant: -45),
+            imageRate.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 15.5),
+            imageRate.widthAnchor.constraint(equalToConstant: 15),
+            imageRate.heightAnchor.constraint(equalToConstant: 17)
         ])
     }
     
