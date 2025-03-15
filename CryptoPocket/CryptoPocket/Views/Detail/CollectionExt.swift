@@ -15,7 +15,7 @@ enum DetailItems: String, CaseIterable {
     case point = "Point"
 }
 
-extension DetailVC: UICollectionViewDataSource {
+extension DetailVC: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let sections = DetailItems.allCases
         return sections.count
@@ -25,9 +25,30 @@ extension DetailVC: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DetailCollectionCell", for: indexPath) as? TimelineCollectionCell else { return UICollectionViewCell() }
         let buttons = DetailItems.allCases
         let button = buttons[indexPath.row]
-        cell.configure(label: button.rawValue)
+        let status = statusTimeline[indexPath.row]
+        cell.configure(label: button.rawValue, textColor: actionTimeline(isActive: status).1)
+        cell.backgroundColor = actionTimeline(isActive: status).0
+        cell.layer.cornerRadius = 25
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        chooseBoolValue(chooseItem: indexPath.row)
+        collectionView.reloadData()
+    }
+    
+    
+    private func actionTimeline(isActive: Bool ) -> (UIColor, UIColor) {
+        isActive ? ( UIColor.white, UIColor.black) : ( UIColor(hex: "#EBEFF1")!, UIColor.gray)
+    }
+    
+    private func chooseBoolValue(chooseItem: Int) {
+        for val in 0...4 {
+            if val != chooseItem {
+                statusTimeline[val] = false
+            }
+        }
+        statusTimeline[chooseItem] = true
+    }
 }
-
 

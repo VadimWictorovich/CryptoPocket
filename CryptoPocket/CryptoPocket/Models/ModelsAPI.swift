@@ -7,7 +7,7 @@
 
 import Foundation
 
-// Основная структура ответа
+
 struct CryptoResponse: Codable {
     let data: CryptoData
 }
@@ -20,6 +20,7 @@ struct CryptoData: Codable {
     let slug: String
     let marketData: MarketData
     let marketcap: Marketcap
+    let supply: Supply
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -29,6 +30,7 @@ struct CryptoData: Codable {
         case slug
         case marketData = "market_data"
         case marketcap
+        case supply
     }
 }
 
@@ -37,12 +39,13 @@ struct MarketData: Codable {
     let priceUsd: Double
     let volumeLast24Hours: Double
     let percentChangeUsdLast24Hours: Double
+    let percentChangeEthLast24Hours: Double
 
-    // Маппинг JSON-ключей на свойства
     enum CodingKeys: String, CodingKey {
         case priceUsd = "price_usd"
         case volumeLast24Hours = "volume_last_24_hours"
         case percentChangeUsdLast24Hours = "percent_change_usd_last_24_hours"
+        case percentChangeEthLast24Hours = "percent_change_eth_last_24_hours"
     }
 }
 
@@ -54,4 +57,8 @@ struct Marketcap: Codable {
         case rank
         case currentMarketcapUsd = "current_marketcap_usd"
     }
+}
+
+struct Supply: Codable {
+    let circulating: Double
 }

@@ -16,7 +16,7 @@ final class CoinCell: UITableViewCell {
     private let labelShortNameCoin = UILabel()
     private let labelPriceCoin = UILabel()
     private let labelRate = UILabel()
-    private let imageRate = UIImageView()
+    private var imageRate = UIImageView()
 
     // MARK: - LIFE CIRCLE
 
@@ -101,24 +101,25 @@ final class CoinCell: UITableViewCell {
         ])
     }
     
-    
     private func setupImageRate() {
-        imageRate.image = UIImage(systemName: "chevron.up")
-        imageRate.tintColor = .green
+//        imageRate.image = UIImage(systemName:"chevron.up")
+//        imageRate.tintColor = .green
         imageRate.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             imageRate.trailingAnchor.constraint(equalTo: labelRate.trailingAnchor, constant: -45),
             imageRate.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 15.5),
             imageRate.widthAnchor.constraint(equalToConstant: 15),
-            imageRate.heightAnchor.constraint(equalToConstant: 17)
+            imageRate.heightAnchor.constraint(equalToConstant: 15)
         ])
     }
     
-    func configure(image: UIImage? = UIImage(systemName: "bitcoinsign.circle"), name: String?, shortName: String?, price: String?, rate: String?) {
+    func configure(image: UIImage? = UIImage(systemName: "bitcoinsign.circle"), name: String?, shortName: String?, price: String?, rate: String?, imgRate: UIImage?, colorImgRate: UIColor?) {
         imageCoin.image = image
         labelNameCoin.text = name
         labelShortNameCoin.text = shortName
         labelPriceCoin.text = price
         labelRate.text = rate
+        imageRate.image = imgRate
+        imageRate.tintColor = colorImgRate
     }
 }

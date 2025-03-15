@@ -31,7 +31,8 @@ final class TimelineCollectionCell: UICollectionViewCell {
         ])
     }
     
-    func configure(label: String) {
+    func configure(label: String, textColor: UIColor) {
         labelTime.text = label
+        labelTime.textColor = textColor
     }
 }

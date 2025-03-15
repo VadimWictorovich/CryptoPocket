@@ -141,8 +141,9 @@ final class HomeVC: UIViewController {
     }
     
     private func showMenuView() -> UIMenu {
-        let action1 = UIAction(title: "Обновить", image: UIImage(named: "menu1")) { _ in
-            print ("Кнопка обновить")
+        let action1 = UIAction(title: "Обновить", image: UIImage(named: "menu1")) { [weak self] _ in
+            self?.showActivityIndicator()
+            self?.updateData()
         }
         let action2 = UIAction(title: "Выйти", image: UIImage(named: "menu2")) { [weak self] _ in
             self?.navigationController?.popToRootViewController(animated: true)

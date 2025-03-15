@@ -10,7 +10,7 @@ import UIKit
 final class DetailVC: UIViewController {
     
     // MARK: - PROPERTIES
-
+    let viewModel: DetailVM
     private let leftNavBarButton = UIButton()
     private let labelPrice = UILabel()
     private let labelRate = UILabel()
@@ -19,11 +19,22 @@ final class DetailVC: UIViewController {
     private let collectionTimelineView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 70, height: 48)
+        layout.itemSize = CGSize(width: 68, height: 48)
         return UICollectionView(frame: .zero, collectionViewLayout: layout)
     }()
+    var statusTimeline: [Bool] = [ true, false,  false,  false, false ]
+    
     
     // MARK: - LIFE CIRCLE
+    
+    init(viewModel: DetailVM) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +47,7 @@ final class DetailVC: UIViewController {
     
     private func setupUI() {
         view.backgroundColor = UIColor(hex: "#F3F5F6")
-        navigationItem.title = "Bitcoin (BTC)"
+        navigationItem.title = "\(viewModel.coin.data.name) (\(viewModel.coin.data.symbol))"
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftNavBarButton)
     }
     
@@ -68,8 +79,7 @@ final class DetailVC: UIViewController {
     }
     
     private func settingsForLabelPrice() {
-        // !!!!!
-        labelPrice.text = "$32,128.80"
+        labelPrice.text = "$\(String(format: "%.2f", viewModel.coin.data.marketData.priceUsd))"
         labelPrice.font = .systemFont(ofSize: 28, weight: .bold)
         labelPrice.textColor = .black
         labelPrice.textAlignment = .center
@@ -81,8 +91,7 @@ final class DetailVC: UIViewController {
     }
     
     private func settingsForLabelRate() {
-        //!!!
-        labelRate.text = "2.5%"
+        labelRate.text = "\(String(format: "%.1f", viewModel.coin.data.marketData.percentChangeUsdLast24Hours))%"
         labelRate.font = .systemFont(ofSize: 14, weight: .medium)
         labelRate.textColor = .gray
         labelRate.textAlignment = .center
@@ -94,9 +103,9 @@ final class DetailVC: UIViewController {
     }
     
     private func settingsForimageRate() {
-        imageRate.image = UIImage(systemName: "chevron.up")
+        imageRate.image = showChevron(procent: viewModel.coin.data.marketData.percentChangeUsdLast24Hours).0
+        imageRate.tintColor = showChevron(procent: viewModel.coin.data.marketData.percentChangeUsdLast24Hours).1
         imageRate.frame = CGRect(origin: .zero, size: CGSize(width: 5, height: 5))
-        imageRate.tintColor = .green
         imageRate.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             imageRate.topAnchor.constraint(equalTo: labelPrice.topAnchor, constant: 40),
@@ -107,10 +116,11 @@ final class DetailVC: UIViewController {
 
     private func settingsForCollectionTimelineView() {
         collectionTimelineView.dataSource = self
-        //collectionTimelineView.delegate = self
+        collectionTimelineView.delegate = self
         collectionTimelineView.register(TimelineCollectionCell.self, forCellWithReuseIdentifier: "DetailCollectionCell")
         collectionTimelineView.backgroundColor = UIColor(hex: "#EBEFF1")
         collectionTimelineView.layer.cornerRadius = 30
+        collectionTimelineView.isScrollEnabled = false
         collectionTimelineView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             collectionTimelineView.topAnchor.constraint(equalTo: labelRate.topAnchor, constant: 40),
@@ -130,6 +140,8 @@ final class DetailVC: UIViewController {
         descriptionTableView.backgroundColor = .white
         descriptionTableView.layer.cornerRadius = 40
         descriptionTableView.translatesAutoresizingMaskIntoConstraints = false
+        descriptionTableView.allowsSelection = false
+        descriptionTableView.isScrollEnabled = false
         NSLayoutConstraint.activate([
             descriptionTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             descriptionTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),

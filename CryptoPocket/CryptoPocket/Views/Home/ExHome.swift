@@ -40,14 +40,16 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         cell.configure(name: coin.data.name,
                        shortName: coin.data.symbol,
                        price: "$\(String(format: "%.2f", coin.data.marketData.priceUsd))",
-                       rate: "\(String(format: "%.1f", coin.data.marketData.percentChangeUsdLast24Hours))%")
+                       rate: "\(String(format: "%.1f", coin.data.marketData.percentChangeUsdLast24Hours))%",
+                       imgRate: showChevron(procent: coin.data.marketData.percentChangeUsdLast24Hours).0,
+                       colorImgRate: showChevron(procent: coin.data.marketData.percentChangeUsdLast24Hours).1 )
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = DetailVC()
-        
-        navigationController?.pushViewController(vc, animated: true)
+        let nextVM = DetailVM(coin: viewModel.coins[indexPath.row])
+        let nextVC = DetailVC(viewModel: nextVM)
+        navigationController?.pushViewController(nextVC, animated: true)
     }
     
     private func settingsSortButton(button: UIButton, superView: UIView) {
