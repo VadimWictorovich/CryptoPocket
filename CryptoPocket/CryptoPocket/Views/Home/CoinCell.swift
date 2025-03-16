@@ -22,6 +22,7 @@ final class CoinCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.backgroundColor = .clear
         addViews()
         setupimageCoin()
         setupLabelNameCoin()
@@ -47,6 +48,7 @@ final class CoinCell: UITableViewCell {
     private func setupimageCoin() {
         imageCoin.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
         imageCoin.contentMode = .scaleAspectFit
+        imageCoin.tintColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         imageCoin.layer.cornerRadius = 25
         imageCoin.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

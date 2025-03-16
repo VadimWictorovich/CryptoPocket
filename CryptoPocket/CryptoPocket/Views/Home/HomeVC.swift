@@ -110,14 +110,17 @@ final class HomeVC: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(CoinCell.self, forCellReuseIdentifier: "CoinCell")
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = UIColor(hex: "#F7F7FA")
         tableView.layer.cornerRadius = 40
+        tableView.contentInset.bottom = 30
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorStyle = .none
         tableView.rowHeight = UITableView.automaticDimension
         tableView.bounces = false
         tableView.showsVerticalScrollIndicator = false
     }
+    
+    
         
     private func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -140,7 +143,7 @@ final class HomeVC: UIViewController {
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 178),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 30)
         ])
     }
     
@@ -152,7 +155,12 @@ final class HomeVC: UIViewController {
         let action2 = UIAction(title: "Выйти", image: UIImage(named: "menu2")) { [weak self] _ in
             UserDefaults.standard.set(false, forKey: "isUserLoggedIn")
             let authVC = UserAuthVC()
-            self?.navigationController?.setViewControllers([authVC], animated: true)
+            let navController = UINavigationController(rootViewController: authVC)
+            if let window = UIApplication.shared.windows.first {
+                window.rootViewController = navController
+                window.makeKeyAndVisible()
+                UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil, completion: nil)
+            }
         }
         let menu = UIMenu(title: "", children: [action1, action2])
         return menu

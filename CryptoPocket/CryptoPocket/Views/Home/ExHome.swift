@@ -21,7 +21,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         sView.addSubview(filtButton)
         settingsForSectionLabel(label: label, superView: sView)
         settingsSortButton(button: filtButton, superView: sView)
-        sView.backgroundColor = .white
+        sView.backgroundColor = UIColor(hex: "#F7F7FA")
         return sView
     }
     
