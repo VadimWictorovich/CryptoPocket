@@ -13,9 +13,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
         let window = UIWindow()
-        window.rootViewController = UINavigationController(rootViewController: UserAuthVC())
+        window.rootViewController = UserDefaults.standard.bool(forKey: "isUserLoggedIn") ? UINavigationController(rootViewController: HomeVC()) :
+        UINavigationController(rootViewController: UserAuthVC())
         window.makeKeyAndVisible()
         self.window = window
         return true

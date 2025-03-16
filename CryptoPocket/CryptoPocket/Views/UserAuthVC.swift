@@ -10,6 +10,7 @@ import UIKit
 final class UserAuthVC: UIViewController {
     
     // MARK: - PROPERTIES
+    private let viewModel = AuthViewModel()
         
     private let logo: UIImageView = {
         let img = UIImageView(image: UIImage(named: "logo"))
@@ -43,6 +44,7 @@ final class UserAuthVC: UIViewController {
         tf.attributedPlaceholder = placeholderText
         tf.leftView = UIImageView(image: UIImage(named: "imgPassword"))
         tf.leftViewMode = .always
+        tf.isSecureTextEntry = true
         return tf
     }()
     
@@ -105,9 +107,17 @@ final class UserAuthVC: UIViewController {
     }
     
     @objc private func loginTapped() {
-        let vc = HomeVC()
-        navigationController?.pushViewController(vc, animated: true)
-        vc.showActivityIndicator()
+        guard let login = usernameTF.text, let password = passwordTF.text, login != "", password != "" else { return }
+        showActivityIndicator()
+        if viewModel.login(login: login, password: password) {
+            let homeVC = HomeVC()
+            navigationController?.pushViewController(homeVC, animated: true)
+        } else {
+            let alert = UIAlertController(title: "Ошибка", message: "Неверный логин или пароль", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            hideActivityIndicator()
+            present(alert, animated: true)
+        }
     }
 }
 

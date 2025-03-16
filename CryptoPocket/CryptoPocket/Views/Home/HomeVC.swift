@@ -70,10 +70,14 @@ final class HomeVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        updateData()
         setupUI()
         addViews()
         settingsViews()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        updateData()
     }
     
     // MARK: - METHODS
@@ -146,13 +150,16 @@ final class HomeVC: UIViewController {
             self?.updateData()
         }
         let action2 = UIAction(title: "Выйти", image: UIImage(named: "menu2")) { [weak self] _ in
-            self?.navigationController?.popToRootViewController(animated: true)
+            UserDefaults.standard.set(false, forKey: "isUserLoggedIn")
+            let authVC = UserAuthVC()
+            self?.navigationController?.setViewControllers([authVC], animated: true)
         }
         let menu = UIMenu(title: "", children: [action1, action2])
         return menu
     }
     
     private func updateData() {
+        showActivityIndicator()
         viewModel.getArrayCoins { [weak self] in
             self?.tableView.reloadData()
             self?.hideActivityIndicator()
