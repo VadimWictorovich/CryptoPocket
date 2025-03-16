@@ -31,4 +31,16 @@ extension UIViewController {
               let color: UIColor = procent < 0 ? .red : .green else { return (UIImage(), .systemBackground) }
         return (img, color)
     }
+    
+    // Keyboard
+    func hideKeyboardWhenTappedAround() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
 }

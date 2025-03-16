@@ -11,7 +11,7 @@ final class UserAuthVC: UIViewController {
     
     // MARK: - PROPERTIES
     private let viewModel = AuthViewModel()
-    private var loginButtonBottomConstraint: NSLayoutConstraint!
+    var loginButtonBottomConstraint: NSLayoutConstraint!
         
     private let logo: UIImageView = {
         let img = UIImageView(image: UIImage(named: "logo"))
@@ -141,7 +141,6 @@ final class UserAuthVC: UIViewController {
         }
     }
         
-        // MARK: - LOGIN ACTION
     @objc private func loginTapped() {
         guard let login = usernameTF.text, let password = passwordTF.text, login != "", password != "" else { return }
         if viewModel.login(login: login, password: password) {
@@ -160,16 +159,5 @@ final class UserAuthVC: UIViewController {
 }
 
 
-extension UIViewController {
-    func hideKeyboardWhenTappedAround() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
-}
 
 
