@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NewTF: UITextField {
+final class NewTF: UITextField {
     var textPadding = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 15)
 
     override func textRect(forBounds bounds: CGRect) -> CGRect {
